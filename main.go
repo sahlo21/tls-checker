@@ -2,7 +2,7 @@ package main
 
 /**
  * TLS Checker by sahlo21
- * Repositorio:
+ * Repositorio: https://github.com/sahlo21/tls-checker
  Uso:
   ./tls-checker -host www.ejemplo.com [opciones]
 
