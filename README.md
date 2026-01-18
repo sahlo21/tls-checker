@@ -22,30 +22,39 @@ Este proyecto permite consultar el estado de los certificados SSL/TLS de forma r
 Para ejecutar la herramienta directamente sin necesidad de generar un binario:
 ```bash
 go run . -host google.com
+```
 Compilación (Forma óptima)
 Si prefieres generar un archivo ejecutable para usarlo en cualquier lugar:
-
-Bash
+```bash
 go build -o tls-checker
 ./tls-checker -host google.com
-🏗️ Arquitectura del Proyecto
-El código se ha dividido en múltiples archivos para separar las responsabilidades (Separation of Concerns):
+```
+## 🏗️ Arquitectura del Proyecto
 
-main.go: Orquestador principal del programa. Maneja el flujo de ejecución y la interacción inicial.
+El código ha sido estructurado siguiendo principios de **diseño modular** para separar las responsabilidades y facilitar la escalabilidad. A continuación se detalla la función de cada componente:
 
-client.go: Contiene la lógica necesaria para realizar las peticiones HTTP a la API de SSL Labs y manejar los tiempos de espera.
+### 📂 Estructura de Archivos
 
-model.go: Define las estructuras de datos (structs) que representan la respuesta JSON de la API.
+* **`main.go`**: Es el punto de entrada de la aplicación. Se encarga de orquestar el flujo general, llamar a los procesos de análisis y gestionar el ciclo de vida de la ejecución.
+* **`client.go`**: Actúa como la capa de comunicación externa. Implementa la lógica para realizar peticiones HTTP a la API de SSL Labs, gestionando los reintentos y los tiempos de espera (*timeouts*).
+* **`model.go`**: Contiene la definición de las estructuras de datos (`structs`). Estas estructuras permiten el mapeo tipado de las respuestas JSON recibidas, asegurando la integridad de los datos en todo el programa.
+* **`utils.go`**: Reúne funciones de utilidad general, como el procesamiento de los *flags* de la línea de comandos (`-host`) y el formateo estético de la salida en consola.
+* **`go.mod`**: El archivo de manifiesto del módulo que garantiza que las dependencias y la versión de Go sean consistentes en cualquier entorno.
 
-utils.go: Incluye funciones de soporte para el procesamiento de argumentos de la terminal y el formateo de los resultados impresos.
+---
 
-go.mod: Define el módulo del proyecto y gestiona las versiones de Go.
+### 🔄 Flujo de Datos
 
-🛠️ Tecnologías utilizadas
-Go (Golang): Lenguaje de programación principal.
+1.  **Entrada**: `main.go` captura el dominio a través de `utils.go`.
+2.  **Procesamiento**: `client.go` realiza la petición a la API externa.
+3.  **Mapeo**: La respuesta JSON se transforma en objetos de Go usando las definiciones en `model.go`.
+4.  **Salida**: El programa procesa los resultados y los muestra al usuario final.
 
-Git: Control de versiones.
+## 🛠️ Tecnologías utilizadas
 
-SSL Labs API: Fuente de datos para el análisis de TLS.
+* **Go (Golang)**: Lenguaje de programación principal, seleccionado por su eficiencia en herramientas de CLI y concurrencia.
+* **Git**: Sistema de control de versiones para el seguimiento del código.
+* **SSL Labs API**: Fuente de datos externa utilizada para realizar el análisis profundo de los certificados TLS.
 
-Desarrollado por sahlo21
+---
+**Desarrollado por [sahlo21](https://github.com/sahlo21)**
