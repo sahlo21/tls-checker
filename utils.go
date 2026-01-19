@@ -28,7 +28,7 @@ func printParams(params Params) {
 
 // printResult: Imprime de forma mas organizada y legible los resultados,
 // incluido la respuesta completa y de cada endopoint retornada por la API
-func printResult(response *Response) {
+func printResult(response *Response, params Params) {
 	// Se imprimen los resultados completos enviados por la APi
 
 	fmt.Println("\n\n========================================")
@@ -68,7 +68,17 @@ func printResult(response *Response) {
 		fmt.Printf("%-20s: %v\n", "Delegation", endp.Delegation)
 
 	}
+	if params.All {
+		folderName := "json_results"
+		nombreArchivo := fmt.Sprintf("%s/%s_report.json", folderName, params.Host)
+		err := os.WriteFile(nombreArchivo, []byte(response.RawJSON), 0644)
 
+		if err != nil {
+			fmt.Printf("Error al guardar el reporte: %v\n", err)
+		} else {
+			fmt.Printf("\n El reporte completo ha sido guardado en: ./%s\n", nombreArchivo)
+		}
+	}
 }
 
 //utilidades
@@ -99,7 +109,7 @@ func processParams() Params {
 	startNew := flag.Bool("startNew", false, "Iniciar un analisis nuevo ignorando los guardados en cache. Desactivado por defecto")
 	fromCache := flag.Bool("fromCache", false, "Usar resultados guardados en cache en caso de existir. Desactivado por defecto")
 	maxAge := flag.Int("maxAge", 0, "Antiguedad maxima del informe cuando de tomar del cache guardado(fromCache). Desactivado por defecto")
-	all := flag.Bool("all", false, "Analizar todos los endpoint del dominio. Desactivado por defecto")
+	all := flag.Bool("all", false, "        Analizar todos los endpoint del dominio. Desactivado por defecto ( se genera un .json debido al gran tamaño de la informacińn)")
 	ignoreMismatch := flag.Bool("ignoreMismatch", false, "Continuir analisis aunque el certificado no coincida con el host. Desactivado por defecto")
 
 	flag.Usage = func() {

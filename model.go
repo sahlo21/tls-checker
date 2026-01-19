@@ -1,6 +1,6 @@
 package main
 
-// Endpoint representa la respuesta completa de la API de SSL labs
+// Response int representa la respuesta completa de la API de SSL labs
 type Response struct {
 	Host            string     `json:"host"`
 	Port            int        `json:"port"`
@@ -12,6 +12,7 @@ type Response struct {
 	EngineVersion   string     `json:"engineVersion"`
 	CriteriaVersion string     `json:"criteriaVersion"`
 	Endpoints       []Endpoint `json:"endpoints"`
+	RawJSON         string     `json:"-"`
 }
 
 // Endpoint representa los resultados de cada endpoint analizado por SSL labs

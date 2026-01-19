@@ -8,7 +8,7 @@ package main
 
 Opciones disponibles:
   -all
-        Analizar todos los endpoint del dominio. Desactivado por defecto
+        Analizar todos los endpoint del dominio. Desactivado por defecto ( se genera un .json debido al gran tamaño de la informacińn)
   -fromCache
         Usar resultados guardados en cache en caso de existir. Desactivado por defecto
   -host string
@@ -33,14 +33,17 @@ func main() {
 	params := processParams()
 	printParams(params)
 
-	url := generateURL2(params)
+	url, err := generateURL2(params)
+	if err != nil {
+		log.Fatalf("Error al generar URL: %v", err)
+	}
 
 	fmt.Println("Analizando el dominio...")
 
-	response, err := waitForAnalysis(url)
+	response, err := waitForAnalysis(url, params)
 	if err != nil {
 		log.Fatalf("Error al obtener resultados: %v", err)
 	}
-	printResult(response)
+	printResult(response, params)
 
 }
